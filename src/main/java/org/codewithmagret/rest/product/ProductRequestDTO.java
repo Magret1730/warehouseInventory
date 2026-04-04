@@ -1,5 +1,8 @@
 package org.codewithmagret.rest.product;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
 /**
  * Represents the request body for creating a new product.
  * This class is used to receive product data from the client.
@@ -7,17 +10,23 @@ package org.codewithmagret.rest.product;
 public class ProductRequestDTO {
     /**
      * The name of the product.
+     * Must not be null, empty, or blank.
      */
+    @NotBlank(message = "Product name is required.")
     private String name;
 
     /**
      * The description of the product.
+     * Must not be null, empty or blank.
      */
+    @NotBlank(message = "Product description is required.")
     private String description;
 
     /**
      * The price of the product.
+     * Must be zero or greater.
      */
+    @Min(value = 0, message = "Product price cannot be negative")
     private double price;
 
     /**

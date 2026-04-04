@@ -1,5 +1,11 @@
-package org.codewithmagret.rest.order;
+package org.codewithmagret.rest.orders;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import org.codewithmagret.rest.orderItem.OrderItemRequestDTO;
 
 import java.time.LocalDate;
@@ -14,22 +20,35 @@ public class OrderRequestDTO {
 
     /**
      * The date the order was placed.
+     * Must not be null and cannot be in the future.
      */
+    @NotNull(message = "Order date is required")
+    @PastOrPresent(message = "Order date cannot be in the future")
     private LocalDate orderDate;
 
     /**
      * The priority level of the order.
+     * Must be between 1 and 10.
      */
-    private int priorityLevel;
+    @NotNull(message = "Priority level is required")
+    @Min(value = 1, message = "Priority level must be at least 1")
+    @Max(value = 10, message = "Priority level must not be greater than 10")
+    private Integer priorityLevel;
 
     /**
      * The ID of the customer placing the order.
+     * Must not be null.
      */
+    @NotNull(message = "Customer id is required")
     private Long customerId;
 
     /**
      * The list of items included in the order.
+     * Must not be null or empty.
+     * Each item in the list will also be validated.
      */
+    @NotEmpty(message = "Order must contain at least one item")
+    @Valid
     private List<OrderItemRequestDTO> items;
 
     /**
@@ -61,7 +80,7 @@ public class OrderRequestDTO {
      *
      * @return the priority level
      */
-    public int getPriorityLevel() {
+    public Integer getPriorityLevel() {
         return priorityLevel;
     }
 
@@ -70,7 +89,7 @@ public class OrderRequestDTO {
      *
      * @param priorityLevel the priority level
      */
-    public void setPriorityLevel(int priorityLevel) {
+    public void setPriorityLevel(Integer priorityLevel) {
         this.priorityLevel = priorityLevel;
     }
 

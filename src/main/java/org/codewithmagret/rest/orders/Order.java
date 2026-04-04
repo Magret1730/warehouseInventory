@@ -1,4 +1,4 @@
-package org.codewithmagret.rest.order;
+package org.codewithmagret.rest.orders;
 
 import jakarta.persistence.*;
 import org.codewithmagret.rest.customer.Customer;
@@ -31,7 +31,7 @@ public class Order {
      * The priority level of the order
      * This field represents the priority level of the order, with a value between 1 and 10.
      */
-    private int priorityLevel; // (1-10)
+    private Integer priorityLevel; // (1-10)
 
     /**
      * Many-to-One relationship between Order and Customer

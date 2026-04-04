@@ -1,25 +1,59 @@
 package org.codewithmagret.rest.orderItem;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
 /**
- * Represents the request body for creating a new order item.
- * This class is used as part of an order creation request.
+ * Represents the request body for creating or updating an order item.
+ * This class contains the quantity ordered, the product ID,
+ * and the order ID the item belongs to.
  */
 public class OrderItemRequestDTO {
 
     /**
-     * The ID of the product being ordered.
+     * The quantity of the product ordered.
+     * Must be at least 1.
      */
+    @NotNull(message = "Quantity is required")
+    @Min(value = 1, message = "Quantity must be at least 1")
+    private Integer quantity;
+
+    /**
+     * The ID of the product associated with the order item.
+     * Must not be null.
+     */
+    @NotNull(message = "Product id is required")
     private Long productId;
 
     /**
-     * The quantity of the product being ordered.
+     * The ID of the order associated with the order item.
+     * Must not be null.
      */
-    private int quantity;
+    @NotNull(message = "Order id is required")
+    private Long orderId;
 
     /**
      * Default constructor.
      */
     public OrderItemRequestDTO() {
+    }
+
+    /**
+     * Gets the quantity of the product ordered.
+     *
+     * @return the quantity
+     */
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    /**
+     * Sets the quantity of the product ordered.
+     *
+     * @param quantity the quantity
+     */
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     /**
@@ -41,20 +75,20 @@ public class OrderItemRequestDTO {
     }
 
     /**
-     * Gets the quantity of the product.
+     * Gets the order ID.
      *
-     * @return the quantity
+     * @return the order ID
      */
-    public int getQuantity() {
-        return quantity;
+    public Long getOrderId() {
+        return orderId;
     }
 
     /**
-     * Sets the quantity of the product.
+     * Sets the order ID.
      *
-     * @param quantity the quantity
+     * @param orderId the order ID
      */
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 }
