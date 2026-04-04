@@ -1,7 +1,7 @@
 package org.codewithmagret.rest.orderItem;
 
 import jakarta.persistence.*;
-import org.codewithmagret.rest.order.Order;
+import org.codewithmagret.rest.orders.Order;
 import org.codewithmagret.rest.product.Product;
 
 /**
@@ -82,6 +82,40 @@ public class OrderItem {
      */
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    /**
+     * Gets products
+     *
+     * @return product
+     */
+    public Product getProduct() {
+        return product;
+    }
+
+    /**
+     * Sets product
+     *
+     * @param product product
+     */
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    /**
+     * Gets order
+     * @return order
+     */
+    public Order getOrder() {
+        return order;
+    }
+
+    /**
+     * Sets order
+     * @param order order
+     */
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     /**

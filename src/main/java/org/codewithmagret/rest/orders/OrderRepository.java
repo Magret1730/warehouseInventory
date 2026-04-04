@@ -1,6 +1,5 @@
-package org.codewithmagret.rest.order;
+package org.codewithmagret.rest.orders;
 
-import org.codewithmagret.rest.customer.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
