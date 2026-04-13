@@ -1,5 +1,6 @@
 package org.codewithmagret.rest.customer;
 
+import org.codewithmagret.rest.customer.dto.CustomerRequestDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

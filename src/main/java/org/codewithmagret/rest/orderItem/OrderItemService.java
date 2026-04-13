@@ -1,5 +1,6 @@
 package org.codewithmagret.rest.orderItem;
 
+import org.codewithmagret.rest.orderItem.dto.OrderItemRequestDTO;
 import org.codewithmagret.rest.orders.Order;
 import org.codewithmagret.rest.orders.OrderRepository;
 import org.codewithmagret.rest.product.Product;

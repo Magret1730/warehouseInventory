@@ -1,4 +1,4 @@
-package org.codewithmagret.rest.orderItem;
+package org.codewithmagret.rest.orderItem.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
