@@ -1,6 +1,7 @@
 package org.codewithmagret.rest.product;
 
 import org.codewithmagret.rest.product.dto.ProductRequestDTO;
+import org.codewithmagret.rest.product.dto.ProductResponseDTO;
 import org.codewithmagret.rest.product.sort.ProductSorter;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    ProductSorter sorter = new ProductSorter();
+//    ProductSorter sorter = new ProductSorter();
 
     /**
      * Constructor-based dependency injection for ProductRepository.
@@ -32,7 +33,7 @@ public class ProductService {
      * @param requestDTO product request data
      * @return saved Product entity
      */
-    public Product createProduct(ProductRequestDTO requestDTO) {
+    public ProductResponseDTO createProduct(ProductRequestDTO requestDTO) {
         validateProduct(requestDTO);
 
         Product product = new Product();
@@ -40,33 +41,25 @@ public class ProductService {
         product.setPrice(requestDTO.getPrice());
         product.setStock(requestDTO.getStock());
 
-        return productRepository.save(product);
+        // Step 1: Save entity
+        Product savedProduct = productRepository.save(product);
+
+        // Step 2: Convert to DTO
+        return mapToResponseDTO(savedProduct);
     }
 
     /**
      * Retrieves all products and optionally sorts them
      * by price or stock in ascending order.
      *
-     * @param sort the sorting field, either "price" or "stock"
      * @return the list of products
      * @throws IllegalArgumentException if the sort parameter is invalid
      */
-    public List<Product> getAllProducts(String sort) {
-        List<Product> products = productRepository.findAll();
-
-        if (sort == null || sort.isBlank()) {
-            return products;
-        }
-
-        if (sort.equalsIgnoreCase("price")) {
-            sorter.sortByPrice(products);
-        } else if (sort.equalsIgnoreCase("stock")) {
-            sorter.sortByStock(products);
-        } else {
-            throw new IllegalArgumentException("Invalid sort parameter. Use 'price' or 'stock'.");
-        }
-
-        return products;
+    public List<ProductResponseDTO> getAllProducts() {
+        return productRepository.findAll()
+                .stream()
+                .map(this::mapToResponseDTO)
+                .toList();
     }
 
     /**
@@ -113,22 +106,77 @@ public class ProductService {
      *
      * @return sorted list of products by price (ascending)
      */
-    public List<Product> sortProductsByPrice() {
-        List<Product> products = new ArrayList<>(productRepository.findAll());
+//    private void sortByPrice(List<Product> products) {
+//        for (int i = 1; i < products.size(); i++) {
+//            Product current = products.get(i);
+//            int j = i - 1;
+//
+//            while (j >= 0 && products.get(j).getPrice() > current.getPrice()) {
+//                products.set(j + 1, products.get(j));
+//                j--;
+//            }
+//
+//            products.set(j + 1, current);
+//        }
+//    }
 
-        for (int i = 1; i < products.size(); i++) {
-            Product current = products.get(i);
-            int j = i - 1;
+    /**
+     * Sorts products by stock using Insertion Sort.
+     *
+     * @param products the list of products to sort by stock
+     */
+//    private void sortByStock(List<Product> products) {
+//        for (int i = 1; i < products.size(); i++) {
+//            Product current = products.get(i);
+//            int j = i - 1;
+//
+//            while (j >= 0 && products.get(j).getStock() > current.getStock()) {
+//                products.set(j + 1, products.get(j));
+//                j--;
+//            }
+//
+//            products.set(j + 1, current);
+//        }
+//    }
 
-            while (j >= 0 && products.get(j).getPrice() > current.getPrice()) {
-                products.set(j + 1, products.get(j));
-                j--;
-            }
+    /**
+     * Retrieves sorted products based on the specified field.
+     * @param by the field to sort by (price or stock)
+     * @return a list of sorted products as ProductResponseDTOs
+     */
+//    public List<ProductResponseDTO> getSortedProducts(String by) {
+//
+//        if (by == null || by.isBlank()) {
+//            throw new IllegalArgumentException("Sort parameter is required");
+//        }
+//
+//        List<Product> products = new ArrayList<>(productRepository.findAll());
+//
+//        if (by.equalsIgnoreCase("price")) {
+//            sortByPrice(products);
+//        } else if (by.equalsIgnoreCase("stock")) {
+//            sortByStock(products);
+//        } else {
+//            throw new IllegalArgumentException("Invalid sort parameter. Use 'price' or 'stock'.");
+//        }
+//
+//        return products.stream()
+//                .map(this::mapToResponseDTO)
+//                .toList();
+//    }
 
-            products.set(j + 1, current);
-        }
-
-        return products;
+    /**
+     * Maps a Product entity to a ProductResponseDTO.
+     * @param product the Product entity to map
+     * @return a ProductResponseDTO containing the product's ID, name, price, and stock
+     */
+    private ProductResponseDTO mapToResponseDTO(Product product) {
+        return new ProductResponseDTO(
+                product.getId(),
+                product.getName(),
+                (int) product.getPrice(),
+                product.getStock()
+        );
     }
 
     /**
