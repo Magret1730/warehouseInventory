@@ -2,10 +2,9 @@ package org.codewithmagret.rest.orders;
 
 import org.codewithmagret.rest.customer.Customer;
 import org.codewithmagret.rest.customer.CustomerRepository;
-import org.codewithmagret.rest.orders.OrderRepository;
+import org.codewithmagret.rest.orders.dto.OrderRequestDTO;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**

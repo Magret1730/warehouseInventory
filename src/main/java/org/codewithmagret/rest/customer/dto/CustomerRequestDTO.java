@@ -1,4 +1,4 @@
-package org.codewithmagret.rest.customer;
+package org.codewithmagret.rest.customer.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

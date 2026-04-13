@@ -1,5 +1,7 @@
 package org.codewithmagret.rest.product;
 
+import org.codewithmagret.rest.product.dto.ProductRequestDTO;
+import org.codewithmagret.rest.product.sort.ProductSorter;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    ProductSorter sorter = new ProductSorter();
 
     /**
      * Constructor-based dependency injection for ProductRepository.
@@ -35,18 +38,35 @@ public class ProductService {
         Product product = new Product();
         product.setName(requestDTO.getName());
         product.setPrice(requestDTO.getPrice());
-        product.setDescription(requestDTO.getDescription());
+        product.setStock(requestDTO.getStock());
 
         return productRepository.save(product);
     }
 
     /**
-     * Retrieves all products from the database.
+     * Retrieves all products and optionally sorts them
+     * by price or stock in ascending order.
      *
-     * @return list of products
+     * @param sort the sorting field, either "price" or "stock"
+     * @return the list of products
+     * @throws IllegalArgumentException if the sort parameter is invalid
      */
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<Product> getAllProducts(String sort) {
+        List<Product> products = productRepository.findAll();
+
+        if (sort == null || sort.isBlank()) {
+            return products;
+        }
+
+        if (sort.equalsIgnoreCase("price")) {
+            sorter.sortByPrice(products);
+        } else if (sort.equalsIgnoreCase("stock")) {
+            sorter.sortByStock(products);
+        } else {
+            throw new IllegalArgumentException("Invalid sort parameter. Use 'price' or 'stock'.");
+        }
+
+        return products;
     }
 
     /**
@@ -73,7 +93,7 @@ public class ProductService {
         Product product = getProductById(id);
         product.setName(requestDTO.getName());
         product.setPrice(requestDTO.getPrice());
-        product.setDescription(requestDTO.getDescription());
+        product.setStock(requestDTO.getStock());
 
         return productRepository.save(product);
     }
@@ -125,8 +145,8 @@ public class ProductService {
             throw new IllegalArgumentException("Price cannot be negative");
         }
 
-        if (requestDTO.getDescription() == null || requestDTO.getDescription().trim().isEmpty()) {
-            throw new IllegalArgumentException("Product description cannot be empty");
+        if (requestDTO.getStock() < 1) {
+            throw new IllegalArgumentException("Product stock cannot be empty");
         }
     }
 }

@@ -27,10 +27,9 @@ public class Product {
     private String name;
 
     /**
-     * The description of the product
-     * This field represents the description of the product.
+     * The available stock quantity of the product.
      */
-    private String description;
+    private int stock;
 
     /**
      * The price of the product.
@@ -43,13 +42,13 @@ public class Product {
      *
      * @param id id of the product
      * @param name name of the product
-     * @param description description of the product
+     * @param stock description of the product
      * @param price price of the product
      */
-    public Product(Long id, String name, String description, double price) {
+    public Product(Long id, String name, int stock, double price) {
         this.id = id;
         this.name = name;
-        this.description = description;
+        this.stock = stock;
         this.price = price;
     }
 
@@ -83,19 +82,21 @@ public class Product {
     }
 
     /**
-     * Gets the description of the product
-     * @return description of the product
+     * Gets the available stock quantity.
+     *
+     * @return the stock quantity
      */
-    public String getDescription() {
-        return description;
+    public int getStock() {
+        return stock;
     }
 
     /**
-     * Sets description of the product
-     * @param description description of the product
+     * Sets the available stock quantity.
+     *
+     * @param stock the stock quantity
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
     /**
@@ -123,7 +124,7 @@ public class Product {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
+                ", stock='" + stock + '\'' +
                 ", price=" + price +
                 '}';
     }

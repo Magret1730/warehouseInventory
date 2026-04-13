@@ -1,4 +1,4 @@
-package org.codewithmagret.rest.product;
+package org.codewithmagret.rest.product.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -16,11 +16,11 @@ public class ProductRequestDTO {
     private String name;
 
     /**
-     * The description of the product.
+     * The available stock quantity of the product.
      * Must not be null, empty or blank.
      */
-    @NotBlank(message = "Product description is required.")
-    private String description;
+    @NotBlank(message = "Product stock is required.")
+    private int stock;
 
     /**
      * The price of the product.
@@ -54,21 +54,21 @@ public class ProductRequestDTO {
     }
 
     /**
-     * Gets the product description.
+     * Gets the available stock quantity.
      *
-     * @return the product description
+     * @return the stock quantity
      */
-    public String getDescription() {
-        return description;
+    public int getStock() {
+        return stock;
     }
 
     /**
-     * Sets the product description.
+     * Sets the available stock quantity.
      *
-     * @param description the product description
+     * @param stock the stock quantity
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
     /**
