@@ -66,6 +66,7 @@ public class OrderBST {
     /**
      * Performs inorder traversal of the BST and stores the orders
      * in sorted order of priority.
+     *  Left -> Root -> Right
      *
      * @param node the current node
      * @param sortedOrders the list to store sorted orders
@@ -79,6 +80,7 @@ public class OrderBST {
         sortedOrders.add(node.order);
         inOrder(node.right, sortedOrders);
     }
+
 
     /**
      * Returns all orders in sorted order of priority using inorder traversal.

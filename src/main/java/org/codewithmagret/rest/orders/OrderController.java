@@ -62,6 +62,29 @@ public class OrderController {
     }
 
     /**
+     * Updates an existing order.
+     * @param id the ID of the order to update
+     * @param request the updated order data
+     * @return the updated order
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody OrderRequestDTO request) {
+        Order updatedOrder = orderService.updateOrder(id, request);
+        return ResponseEntity.ok(updatedOrder);
+    }
+
+    /**
+     * Deletes an order by ID.
+     * @param id the ID of the order to delete
+     * @return a response entity with no content
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+        orderService.deleteOrder(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
      * Adds all current orders into the priority BST.
      *
      * @return a success message

@@ -10,17 +10,4 @@ import java.util.Optional;
  * Repository for Order entity operations.
  */
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    /**
-     * Finds all products
-     * @return list of all products
-     */
-    List<Product> findAll();
-
-    /**
-     * Finds a product
-     * @param id id of product
-     * @return product with the given id or empty if not found
-     */
-    Optional<Product> findById(Long id);
-
 }
