@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    private final ProductRepository productRepository;
+    private static ProductRepository productRepository;
 
     /**
      * Constructor-based dependency injection for ProductRepository.
@@ -116,15 +116,13 @@ public class ProductService {
      *
      * @param products the list of products to sort by price
      */
-    private void sortByPrice(List<Product> products) {
+    public static void sortByPrice(List<Product> products) {
         if (products == null || products.size() <= 1) {
             throw new IllegalArgumentException("No products found");
         }
 
         int length = products.size();
-        System.out.println("length: " + length);
         int numOfBuckets = (int) Math.ceil(Math.sqrt(length));
-        System.out.println("numOfBuckets: " + numOfBuckets);
 
         double max = products.get(0).getPrice();
         for (Product product : products) {
@@ -132,27 +130,22 @@ public class ProductService {
                 max = product.getPrice();
             }
         }
-        System.out.println("max: " + max);
 
         List<List<Product>> buckets = new ArrayList<>();
         for (int i = 0; i < numOfBuckets; i++) {
             buckets.add(new ArrayList<>());
         }
-        System.out.println("buckets: " + buckets);
 
         for (Product product : products) {
-            System.out.println("BucketPRice" + product.getPrice());
             int bucketNum = (int) Math.ceil((product.getPrice() * numOfBuckets) / max);
             if (bucketNum == 0) {
                 bucketNum = 1;
             }
             buckets.get(bucketNum - 1).add(product);
         }
-        System.out.println("Add buckets: " + buckets);
 
         for (List<Product> bucket : buckets) {
             bucket.sort(Comparator.comparingDouble(Product::getPrice));
-            System.out.println("Sorrt bucket: " + bucket);
         }
 
         int index = 0;
@@ -175,7 +168,7 @@ public class ProductService {
      *
      * @param products the list of products to sort by stock
      */
-    private void sortByStock(List<Product> products) {
+    public static void sortByStock(List<Product> products) {
         if (products == null || products.size() <= 1) {
             throw new IllegalArgumentException("No products found");
         }
