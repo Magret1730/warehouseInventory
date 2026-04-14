@@ -1,0 +1,13 @@
+org.codewithmagret
+org.codewithmagret.rest.config
+org.codewithmagret.rest.customer
+org.codewithmagret.rest.customer.dto
+org.codewithmagret.rest.exception
+org.codewithmagret.rest.orderbst
+org.codewithmagret.rest.orderItem
+org.codewithmagret.rest.orderItem.dto
+org.codewithmagret.rest.orders
+org.codewithmagret.rest.orders.bst
+org.codewithmagret.rest.orders.dto
+org.codewithmagret.rest.product
+org.codewithmagret.rest.product.dto

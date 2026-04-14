@@ -46,18 +46,33 @@ public class ProductResponseDTO {
         this.price = price;
     }
 
+    /**
+     *  Gets the unique identifier of the product.
+     * @return the product ID
+     */
     public Long getId() {
         return id;
     }
 
+    /* Sets the unique identifier of the product.
+     * @param id the product ID
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * Gets the name of the product.
+     * @return the product name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the name of the product.
+     * @param name the product name
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -80,10 +95,18 @@ public class ProductResponseDTO {
         this.stock = stock;
     }
 
+    /**
+     * Gets the price of the product.
+     * @return the product price
+     */
     public double getPrice() {
         return price;
     }
 
+    /**
+     * Sets the price of the product.
+     * @param price the product price
+     */
     public void setPrice(double price) {
         this.price = price;
     }
