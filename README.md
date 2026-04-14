@@ -311,7 +311,7 @@ All generated content was reviewed, tested, and modified to fit project requirem
 
 ## Javadocs
 The javadocs can be found in
-`github.io/Magret1730/warehouseInventory`
+`[Javadocs URL](https://magret1730.github.io/warehouseInventory/)`
 
 ---
 
