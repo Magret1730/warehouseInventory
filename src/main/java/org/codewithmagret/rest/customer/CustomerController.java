@@ -60,4 +60,27 @@ public class CustomerController {
         Customer createdCustomer = customerService.createCustomer(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
     }
+
+    /**
+     * Updates an existing customer by ID.
+     * @param id the ID of the customer to update
+     * @param request the customer update request data
+     * @return  the updated customer
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody CustomerRequestDTO request) {
+        Customer updatedCustomer = customerService.updateCustomer(id, request);
+        return ResponseEntity.ok(updatedCustomer);
+    }
+
+    /**
+     * Deletes a customer by ID.
+     * @param id the ID of the customer to delete
+     * @return a response indicating the result of the operationr
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+        customerService.deleteCustomer(id);
+        return ResponseEntity.noContent().build();
+    }
 }

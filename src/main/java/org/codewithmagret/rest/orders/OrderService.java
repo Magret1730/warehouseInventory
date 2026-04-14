@@ -9,6 +9,7 @@ import org.codewithmagret.rest.orders.bst.OrderBST;
 import org.codewithmagret.rest.orders.dto.OrderRequestDTO;
 import org.codewithmagret.rest.product.Product;
 import org.codewithmagret.rest.product.ProductRepository;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,29 +64,6 @@ public class OrderService {
         this.orderItemRepository = orderItemRepository;
         this.orderBST = new OrderBST();
     }
-
-    /**
-     * Creates and saves a new order after validating the request data.
-     *
-     * @param requestDTO the order request data
-     * @return the saved order
-     * @throws IllegalArgumentException if the request data is invalid
-     */
-//    public Order createOrder(OrderRequestDTO requestDTO) {
-//        validateOrderRequest(requestDTO);
-//
-//        Customer customer = customerRepository.findById(requestDTO.getCustomerId())
-//                .orElseThrow(() -> new IllegalArgumentException(
-//                        "Customer not found with id: " + requestDTO.getCustomerId()
-//                ));
-//
-//        Order order = new Order();
-//        order.setOrderDate(requestDTO.getOrderDate());
-//        order.setPriorityLevel(requestDTO.getPriorityLevel());
-//        order.setCustomer(customer);
-//
-//        return orderRepository.save(order);
-//    }
 
     /**
      * Creates a new order with its associated order items.
@@ -157,8 +135,11 @@ public class OrderService {
      * @throws IllegalArgumentException if no order is found with the given ID
      */
     public Order getOrderById(Long id) {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + id));
+       if (orderRepository.existsById(id)) {
+           return orderRepository.findById(id).get();
+       } else {
+           throw new IllegalArgumentException("Order not found with id: " + id);
+       }
     }
 
     /**

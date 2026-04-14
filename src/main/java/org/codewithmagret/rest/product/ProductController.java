@@ -2,7 +2,7 @@ package org.codewithmagret.rest.product;
 
 import org.codewithmagret.rest.product.dto.ProductRequestDTO;
 import org.codewithmagret.rest.product.dto.ProductResponseDTO;
-import org.codewithmagret.rest.product.sort.ProductSorter;
+//import org.codewithmagret.rest.product.sort.ProductSorter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,16 +21,13 @@ public class ProductController {
      */
     private final ProductService productService;
 
-    private final ProductSorter productSorter;
-
     /**
      * Creates a ProductController with the given product service.
      *
      * @param productService the product service
      */
-    public ProductController(ProductService productService, ProductSorter productSorter) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.productSorter = productSorter;
     }
 
     /**
@@ -64,6 +61,17 @@ public class ProductController {
      */
     @GetMapping("/sorted")
     public ResponseEntity<List<ProductResponseDTO>> getSortedProducts(@RequestParam String by) {
-        return ResponseEntity.ok(productSorter.getSortedProducts(by));
+        return ResponseEntity.ok(productService.getSortedProducts(by));
+    }
+
+    /**
+     * Deletes a product by its ID.
+     * @param id the ID of the product to delete
+     * @return a response entity with no content status
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
     }
 }

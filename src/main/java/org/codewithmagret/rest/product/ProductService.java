@@ -2,10 +2,11 @@ package org.codewithmagret.rest.product;
 
 import org.codewithmagret.rest.product.dto.ProductRequestDTO;
 import org.codewithmagret.rest.product.dto.ProductResponseDTO;
-import org.codewithmagret.rest.product.sort.ProductSorter;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -16,7 +17,6 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
-//    ProductSorter sorter = new ProductSorter();
 
     /**
      * Constructor-based dependency injection for ProductRepository.
@@ -69,8 +69,11 @@ public class ProductService {
      * @return found Product
      */
     public Product getProductById(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + id));
+        if (productRepository.findById(id).isPresent()) {
+            return productRepository.findById(id).get();
+        }  else {
+            throw new IllegalArgumentException("Product not found with id: " + id);
+        }
     }
 
     /**
@@ -102,68 +105,141 @@ public class ProductService {
     }
 
     /**
-     * Sorts products by price using Insertion Sort.
+     * Sorts products by price using Bucket Sort.
      *
-     * @return sorted list of products by price (ascending)
+     * Steps:
+     * 1. Determine number of buckets using square root of array length
+     * 2. Find maximum price
+     * 3. Place each product into its correct bucket
+     * 4. Sort each bucket
+     * 5. Merge all buckets back into the original list
+     *
+     * @param products the list of products to sort by price
      */
-//    private void sortByPrice(List<Product> products) {
-//        for (int i = 1; i < products.size(); i++) {
-//            Product current = products.get(i);
-//            int j = i - 1;
-//
-//            while (j >= 0 && products.get(j).getPrice() > current.getPrice()) {
-//                products.set(j + 1, products.get(j));
-//                j--;
-//            }
-//
-//            products.set(j + 1, current);
-//        }
-//    }
+    private void sortByPrice(List<Product> products) {
+        if (products == null || products.size() <= 1) {
+            throw new IllegalArgumentException("No products found");
+        }
+
+        int length = products.size();
+        System.out.println("length: " + length);
+        int numOfBuckets = (int) Math.ceil(Math.sqrt(length));
+        System.out.println("numOfBuckets: " + numOfBuckets);
+
+        double max = products.get(0).getPrice();
+        for (Product product : products) {
+            if (product.getPrice() > max) {
+                max = product.getPrice();
+            }
+        }
+        System.out.println("max: " + max);
+
+        List<List<Product>> buckets = new ArrayList<>();
+        for (int i = 0; i < numOfBuckets; i++) {
+            buckets.add(new ArrayList<>());
+        }
+        System.out.println("buckets: " + buckets);
+
+        for (Product product : products) {
+            System.out.println("BucketPRice" + product.getPrice());
+            int bucketNum = (int) Math.ceil((product.getPrice() * numOfBuckets) / max);
+            if (bucketNum == 0) {
+                bucketNum = 1;
+            }
+            buckets.get(bucketNum - 1).add(product);
+        }
+        System.out.println("Add buckets: " + buckets);
+
+        for (List<Product> bucket : buckets) {
+            bucket.sort(Comparator.comparingDouble(Product::getPrice));
+            System.out.println("Sorrt bucket: " + bucket);
+        }
+
+        int index = 0;
+        for (List<Product> bucket : buckets) {
+            for (Product product : bucket) {
+                products.set(index++, product);
+            }
+        }
+    }
 
     /**
-     * Sorts products by stock using Insertion Sort.
+     * Sorts products by stock using Bucket Sort.
+     *
+     * Steps:
+     * 1. Determine number of buckets using square root of array length
+     * 2. Find maximum stock
+     * 3. Place each product into its correct bucket
+     * 4. Sort each bucket
+     * 5. Merge all buckets back into the original list
      *
      * @param products the list of products to sort by stock
      */
-//    private void sortByStock(List<Product> products) {
-//        for (int i = 1; i < products.size(); i++) {
-//            Product current = products.get(i);
-//            int j = i - 1;
-//
-//            while (j >= 0 && products.get(j).getStock() > current.getStock()) {
-//                products.set(j + 1, products.get(j));
-//                j--;
-//            }
-//
-//            products.set(j + 1, current);
-//        }
-//    }
+    private void sortByStock(List<Product> products) {
+        if (products == null || products.size() <= 1) {
+            throw new IllegalArgumentException("No products found");
+        }
+
+        int length = products.size();
+        int numOfBuckets = (int) Math.ceil(Math.sqrt(length));
+
+        int max = products.get(0).getStock();
+        for (Product product : products) {
+            if (product.getStock() > max) {
+                max = product.getStock();
+            }
+        }
+
+        List<List<Product>> buckets = new ArrayList<>();
+        for (int i = 0; i < numOfBuckets; i++) {
+            buckets.add(new ArrayList<>());
+        }
+
+        for (Product product : products) {
+            int bucketNum = (int) Math.ceil(((double) product.getStock() * numOfBuckets) / max);
+            if (bucketNum == 0) {
+                bucketNum = 1;
+            }
+            buckets.get(bucketNum - 1).add(product);
+        }
+
+        for (List<Product> bucket : buckets) {
+            bucket.sort(Comparator.comparingInt(Product::getStock));
+        }
+
+        int index = 0;
+        for (List<Product> bucket : buckets) {
+            for (Product product : bucket) {
+                products.set(index++, product);
+            }
+        }
+    }
 
     /**
      * Retrieves sorted products based on the specified field.
      * @param by the field to sort by (price or stock)
      * @return a list of sorted products as ProductResponseDTOs
      */
-//    public List<ProductResponseDTO> getSortedProducts(String by) {
-//
-//        if (by == null || by.isBlank()) {
-//            throw new IllegalArgumentException("Sort parameter is required");
-//        }
-//
-//        List<Product> products = new ArrayList<>(productRepository.findAll());
-//
-//        if (by.equalsIgnoreCase("price")) {
-//            sortByPrice(products);
-//        } else if (by.equalsIgnoreCase("stock")) {
-//            sortByStock(products);
-//        } else {
-//            throw new IllegalArgumentException("Invalid sort parameter. Use 'price' or 'stock'.");
-//        }
-//
-//        return products.stream()
-//                .map(this::mapToResponseDTO)
-//                .toList();
-//    }
+    public List<ProductResponseDTO> getSortedProducts(String by) {
+
+        if (by == null || by.isBlank()) {
+            throw new IllegalArgumentException("Sort parameter is required");
+        }
+
+        List<Product> products = new ArrayList<>(productRepository.findAll());
+
+        if (by.equalsIgnoreCase("price")) {
+            sortByPrice(products);
+        } else if (by.equalsIgnoreCase("stock")) {
+            sortByStock(products);
+        } else {
+            throw new IllegalArgumentException("Invalid sort parameter. Use 'price' or 'stock'.");
+        }
+
+        return products.stream()
+                .map(this::mapToResponseDTO)
+                .toList();
+    }
 
     /**
      * Maps a Product entity to a ProductResponseDTO.
@@ -174,8 +250,9 @@ public class ProductService {
         return new ProductResponseDTO(
                 product.getId(),
                 product.getName(),
-                (int) product.getPrice(),
-                product.getStock()
+                product.getStock(),
+                (int) product.getPrice()
+
         );
     }
 
