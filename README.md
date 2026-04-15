@@ -198,8 +198,8 @@ creating a structure like this:
 
 ### Where would you place duplicate priority values?
 
-Duplicate priority values are placed in the right subtree. This is because the insertion logic
-treats values that are greater than or equal to the current node as going to the right.
+Duplicate priority values are placed in the **right subtree**. This is because the insertion logic
+treats values that are **greater than or equal to** the current node as going to the right.
 This ensures consistency in the tree structure and maintains the Binary Search Tree property.
 
 ---
@@ -208,49 +208,55 @@ This ensures consistency in the tree structure and maintains the Binary Search T
 
 ### How does the sorting algorithm work?
 
-I used **Bucket Sort**.
-**Example:**
+I used **Insertion Sort**.
+
+**Example:**  
 Arr = [29, 25, 3, 49, 9]
 
 ```
 Steps:
-1. Determine the number of buckets
-    a. Calculate the length of the input array (n)
-        Length = 5
-    b. Calculate the square root of the length of the array to determine the number of buckets
-        Number of buckets = ceil(sqrt(5)) = 3
-2. Create empty buckets
-    Bucket 1: []
-    Bucket 2: []
-    Bucket 3: []
-3. Find the maximum value in the array
-    Max value = 49
-4. Calculate which element goes into which bucket
-    a. For each element in the input array, calculate the bucket index using the formula:
-        Bucket index = ceil((element * number of buckets) / max value)
-    b. Place the element into the corresponding bucket based on the calculated index
-        29 -> Bucket index = ceil((29 * 3) / 49) = 2 -> Bucket 2: [29]
-        25 -> Bucket index = ceil((25 * 3) / 49) = 2 -> Bucket 2: [29, 25]
-        3 -> Bucket index = ceil((3 * 3) / 49) = 1 -> Bucket 1: [3]
-        49 -> Bucket index = ceil((49 * 3) / 49) = 3 -> Bucket 3: [49]
-        9 -> Bucket index = ceil((9 * 3) / 49) = 1 -> Bucket 1: [3, 9]
-    Buckets after distribution:
-    Bucket 1: [3, 9]
-    Bucket 2: [29, 25]
-    Bucket 3: [49]
-5. Sort each bucket using a sorting algorithm (e.g., Insertion Sort)
-    a. Sort Bucket 1: [3, 9] -> [3, 9]
-    b. Sort Bucket 2: [29, 25] -> [25, 29]
-    c. Sort Bucket 3: [49] -> [49]
-6. Merge all buckets by Concatenating the sorted buckets to get the final sorted array
-    Final sorted array = [3, 9] + [25, 29] + [49] = [3, 9, 25, 29, 49]
+1. Assume the first element is already sorted
+    Sorted portion: [29]
+
+2. Take the next element (25)
+    Compare 25 with 29
+    Since 25 < 29, shift 29 one position to the right
+    Insert 25 into the correct position
+    Array becomes: [25, 29, 3, 49, 9]
+
+3. Take the next element (3)
+    Compare 3 with 29
+    Since 3 < 29, shift 29 to the right
+    Compare 3 with 25
+    Since 3 < 25, shift 25 to the right
+    Insert 3 into the correct position
+    Array becomes: [3, 25, 29, 49, 9]
+
+4. Take the next element (49)
+    Compare 49 with 29
+    Since 49 > 29, it is already in the correct position
+    Array remains: [3, 25, 29, 49, 9]
+
+5. Take the next element (9)
+    Compare 9 with 49
+    Since 9 < 49, shift 49 to the right
+    Compare 9 with 29
+    Since 9 < 29, shift 29 to the right
+    Compare 9 with 25
+    Since 9 < 25, shift 25 to the right
+    Compare 9 with 3
+    Since 9 > 3, insert 9 after 3
+    Array becomes: [3, 9, 25, 29, 49]
+
+6. Continue until all elements have been inserted into their correct positions
+    Final sorted array = [3, 9, 25, 29, 49]
 ```
 
 ---
 
 ### What is the time complexity of your algorithm?
 
-The time complexity of Bubble Sort is:
+The time complexity of Insertion Sort is:
 
 - **Best case:** O(n) when the list is already sorted and an optimized version is used
 - **Worst case:** O(n²)
@@ -265,9 +271,10 @@ Bubble Sort performs well on:
 
 ### Why is your sorting algorithm ideal or not ideal for very large datasets?
 
-Bubble Sort is **not ideal for very large datasets** because it has a time complexity of O(n²),
-which makes it inefficient when the amount of data grows. It is better suited for small datasets
-or educational purposes because it is simple to understand and implement.
+Insertion Sort is not ideal for very large datasets because its worst-case and average-case
+time complexity is O(n²), which makes it inefficient as the amount of data increases.
+However, it is a good choice for small or nearly sorted datasets because it is simple,
+easy to implement, and performs efficiently when only a few elements are out of place.
 
 ---
 
@@ -311,7 +318,7 @@ All generated content was reviewed, tested, and modified to fit project requirem
 
 ## Javadocs
 The javadocs can be found in
-`[Javadocs URL](https://magret1730.github.io/warehouseInventory/)`
+[Javadocs URL](https://magret1730.github.io/warehouseInventory/)
 
 ---
 

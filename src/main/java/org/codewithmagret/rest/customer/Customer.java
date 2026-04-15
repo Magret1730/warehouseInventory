@@ -10,7 +10,7 @@ import jakarta.persistence.*;
  * primary key for the customer.
  */
 @Entity
-@Table(name = "customers", uniqueConstraints = {
+@Table(name = "customer", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"email"})
 })
 public class Customer {
