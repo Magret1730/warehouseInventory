@@ -31,27 +31,27 @@ public class OrderBST {
     /**
      * Inserts an order into the BST recursively.
      *
-     * @param currentNode the current node being checked
+     * @param current the current node being checked
      * @param order the order to insert
      * @return the updated node
      */
-    private OrderNode insert(OrderNode currentNode, Order order) {
-        if (currentNode == null) {
+    private OrderNode insertRecursive(OrderNode current, Order order) {
+        if (current == null) {
             OrderNode newNode = new OrderNode();
             newNode.order = order;
             return newNode;
         }
 
         int newPriority = order.getPriorityLevel();
-        int currentPriority = currentNode.order.getPriorityLevel();
+        int currentPriority = current.order.getPriorityLevel();
 
         if (newPriority < currentPriority) {
-            currentNode.left = insert(currentNode.left, order);
-            return currentNode;
+            current.left = insertRecursive(current.left, order);
         } else {
-            currentNode.right = insert(currentNode.right, order);
-            return currentNode;
+            current.right = insertRecursive(current.right, order);
         }
+
+        return current;
     }
 
     /**
@@ -60,9 +60,8 @@ public class OrderBST {
      * @param order the order to insert
      */
     public void insert(Order order) {
-        root = insert(root, order);
+        root = insertRecursive(root, order);
     }
-
     /**
      * Performs inorder traversal of the BST and stores the orders
      * in sorted order of priority.
@@ -104,8 +103,8 @@ public class OrderBST {
             return null;
         }
 
-        while (node.left != null) {
-            node = node.left;
+        while (node.right != null) {
+            node = node.right;
         }
 
         return node;
@@ -122,8 +121,8 @@ public class OrderBST {
             return null;
         }
 
-        while (node.right != null) {
-            node = node.right;
+        while (node.left != null) {
+            node = node.left;
         }
 
         return node;

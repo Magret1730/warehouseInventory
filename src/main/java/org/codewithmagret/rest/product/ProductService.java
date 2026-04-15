@@ -116,49 +116,48 @@ public class ProductService {
      *
      * @param products the list of products to sort by price
      */
-    public static void sortByPrice(List<Product> products) {
-        if (products == null || products.size() <= 1) {
-            throw new IllegalArgumentException("No products found");
-        }
-
-        int length = products.size();
-        int numOfBuckets = (int) Math.ceil(Math.sqrt(length));
-
-        double max = products.get(0).getPrice();
-        for (Product product : products) {
-            if (product.getPrice() > max) {
-                max = product.getPrice();
-            }
-        }
-
-        List<List<Product>> buckets = new ArrayList<>();
-        for (int i = 0; i < numOfBuckets; i++) {
-            buckets.add(new ArrayList<>());
-        }
-
-        for (Product product : products) {
-            int bucketNum = (int) Math.ceil((product.getPrice() * numOfBuckets) / max);
-            if (bucketNum == 0) {
-                bucketNum = 1;
-            }
-            buckets.get(bucketNum - 1).add(product);
-        }
-
-        for (List<Product> bucket : buckets) {
-            bucket.sort(Comparator.comparingDouble(Product::getPrice));
-        }
-
-        int index = 0;
-        for (List<Product> bucket : buckets) {
-            for (Product product : bucket) {
-                products.set(index++, product);
-            }
-        }
-    }
+//    public static void sortByPrice(List<Product> products) {
+//        if (products == null || products.size() <= 1) {
+//            throw new IllegalArgumentException("No products found");
+//        }
+//
+//        int length = products.size();
+//        int numOfBuckets = (int) Math.ceil(Math.sqrt(length));
+//
+//        double max = products.get(0).getPrice();
+//        for (Product product : products) {
+//            if (product.getPrice() > max) {
+//                max = product.getPrice();
+//            }
+//        }
+//
+//        List<List<Product>> buckets = new ArrayList<>();
+//        for (int i = 0; i < numOfBuckets; i++) {
+//            buckets.add(new ArrayList<>());
+//        }
+//
+//        for (Product product : products) {
+//            int bucketNum = (int) Math.ceil((product.getPrice() * numOfBuckets) / max);
+//            if (bucketNum == 0) {
+//                bucketNum = 1;
+//            }
+//            buckets.get(bucketNum - 1).add(product);
+//        }
+//
+//        for (List<Product> bucket : buckets) {
+//            bucket.sort(Comparator.comparingDouble(Product::getPrice));
+//        }
+//
+//        int index = 0;
+//        for (List<Product> bucket : buckets) {
+//            for (Product product : bucket) {
+//                products.set(index++, product);
+//            }
+//        }
+//    }
 
     /**
      * Sorts products by stock using Bucket Sort.
-     *
      * Steps:
      * 1. Determine number of buckets using square root of array length
      * 2. Find maximum stock
@@ -168,43 +167,103 @@ public class ProductService {
      *
      * @param products the list of products to sort by stock
      */
+//    public static void sortByStock(List<Product> products) {
+//        if (products == null || products.size() <= 1) {
+//            throw new IllegalArgumentException("No products found");
+//        }
+//
+//        int length = products.size();
+//        int numOfBuckets = (int) Math.ceil(Math.sqrt(length));
+//
+//        int max = products.get(0).getStock();
+//        for (Product product : products) {
+//            if (product.getStock() > max) {
+//                max = product.getStock();
+//            }
+//        }
+//
+//        List<List<Product>> buckets = new ArrayList<>();
+//        for (int i = 0; i < numOfBuckets; i++) {
+//            buckets.add(new ArrayList<>());
+//        }
+//
+//        for (Product product : products) {
+//            int bucketNum = (int) Math.ceil(((double) product.getStock() * numOfBuckets) / max);
+//            if (bucketNum == 0) {
+//                bucketNum = 1;
+//            }
+//            buckets.get(bucketNum - 1).add(product);
+//        }
+//
+//        for (List<Product> bucket : buckets) {
+//            bucket.sort(Comparator.comparingInt(Product::getStock));
+//        }
+//
+//        int index = 0;
+//        for (List<Product> bucket : buckets) {
+//            for (Product product : bucket) {
+//                products.set(index++, product);
+//            }
+//        }
+//    }
+
+    /**
+     * Sorts products by price using Insertion Sort.
+     *
+     * Steps:
+     * 1. Start from the second element (index 1)
+     * 2. Compare the current product with the previous elements
+     * 3. Shift all elements greater than the current product to the right
+     * 4. Insert the current product into its correct position
+     * 5. Repeat until the entire list is sorted
+     *
+     * @param products the list of products to sort by price
+     */
+    public static void sortByPrice(List<Product> products) {
+        if (products == null || products.size() <= 1) {
+            throw new IllegalArgumentException("No products found");
+        }
+
+        for (int i = 1; i < products.size(); i++) {
+            Product current = products.get(i);
+            int j = i - 1;
+
+            while (j >= 0 && products.get(j).getPrice() > current.getPrice()) {
+                products.set(j + 1, products.get(j));
+                j--;
+            }
+
+            products.set(j + 1, current);
+        }
+    }
+
+    /**
+     * Sorts products by stock using Insertion Sort.
+     *
+     * Steps:
+     * 1. Start from the second element (index 1)
+     * 2. Compare the current product with the previous elements
+     * 3. Shift all elements greater than the current product to the right
+     * 4. Insert the current product into its correct position
+     * 5. Repeat until the entire list is sorted
+     *
+     * @param products the list of products to sort by stock
+     */
     public static void sortByStock(List<Product> products) {
         if (products == null || products.size() <= 1) {
             throw new IllegalArgumentException("No products found");
         }
 
-        int length = products.size();
-        int numOfBuckets = (int) Math.ceil(Math.sqrt(length));
+        for (int i = 1; i < products.size(); i++) {
+            Product current = products.get(i);
+            int j = i - 1;
 
-        int max = products.get(0).getStock();
-        for (Product product : products) {
-            if (product.getStock() > max) {
-                max = product.getStock();
+            while (j >= 0 && products.get(j).getStock() > current.getStock()) {
+                products.set(j + 1, products.get(j));
+                j--;
             }
-        }
 
-        List<List<Product>> buckets = new ArrayList<>();
-        for (int i = 0; i < numOfBuckets; i++) {
-            buckets.add(new ArrayList<>());
-        }
-
-        for (Product product : products) {
-            int bucketNum = (int) Math.ceil(((double) product.getStock() * numOfBuckets) / max);
-            if (bucketNum == 0) {
-                bucketNum = 1;
-            }
-            buckets.get(bucketNum - 1).add(product);
-        }
-
-        for (List<Product> bucket : buckets) {
-            bucket.sort(Comparator.comparingInt(Product::getStock));
-        }
-
-        int index = 0;
-        for (List<Product> bucket : buckets) {
-            for (Product product : bucket) {
-                products.set(index++, product);
-            }
+            products.set(j + 1, current);
         }
     }
 

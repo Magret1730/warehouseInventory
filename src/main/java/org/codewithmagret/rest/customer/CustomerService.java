@@ -36,6 +36,11 @@ public class CustomerService {
     public Customer createCustomer(CustomerRequestDTO requestDTO) {
         validateCustomerRequest(requestDTO);
 
+        String email = requestDTO.getEmail().trim();
+        if (customerRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("Customer with this email already exists");
+        }
+
         Customer customer = new Customer();
         customer.setName(requestDTO.getName().trim());
         customer.setEmail(requestDTO.getEmail().trim());
