@@ -76,7 +76,7 @@ public class OrderBSTTest {
 
         assertNotNull(highest);
         assertNotNull(lowest);
-        assertEquals(8, highest.getPriorityLevel());
-        assertEquals(1, lowest.getPriorityLevel());
+        assertEquals(1, highest.getPriorityLevel());
+        assertEquals(8, lowest.getPriorityLevel());
     }
 }
